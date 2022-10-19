@@ -1,0 +1,4 @@
+Ivo		Ivic	50
+Ante	Antic	40
+Jure	Juric	80
+Ana		Anic	100
