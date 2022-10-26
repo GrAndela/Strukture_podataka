@@ -7,6 +7,7 @@
 #define CANT_ALLOCATE_MEMORY_ERROR (-1)
 #define EMPTY_LIST_ERROR (-2)
 #define WRONG_CHOICE_ERROR (-3)
+#define NO_PERSON_IN_LIST_ERROR (-4)
 
 
 struct _Student;
@@ -23,6 +24,10 @@ int Print(Position head);
 int Append(Position head, char* name, char* surname, int birthYear);
 Position FindLast(Position head);
 int AddAfter(Position PositionInList, Position newElement);
+Position FindElementBySurname(Position head, char* surname);
+int DeleteElement(Position head, char* surname);
+Position FindBefore(Position head, char* surname);
+
 
 int main() {
 	Position head = NULL;
@@ -31,6 +36,7 @@ int main() {
 	int birthYear = 0;
 	int choice = 1;
 	int option = 0;
+	Position temp = NULL;
 
 	head = (Position)malloc(sizeof(Student));
 	if (!head) {
@@ -47,6 +53,8 @@ int main() {
 		printf("\nAdd new person at the beggining of the list -> 1\n");
 		printf("\nPrint list -> 2\n");
 		printf("\nAdd new person at the end of the list -> 3\n");
+		printf("\nFind person by surname -> 4\n");
+		printf("\nDelete person from the list -> 5\n");
 		printf("\nYour choice:\n");
 		scanf("%d", &option);
 
@@ -63,6 +71,26 @@ int main() {
 			printf("Write name,surname and birth year of the new person:\n");
 			scanf("%s %s %d", name, surname, &birthYear);
 			Append(head, name, surname, birthYear);
+		}
+		else if (option == 4) {
+			printf("Write surname of the person you want to find:\n");
+			scanf("%s", surname);
+			temp = FindElementBySurname(head, surname);
+			if (temp == NULL) {
+				printf("That person is not in the list!\n");
+				return NO_PERSON_IN_LIST_ERROR;
+			}
+			else {
+				printf("Name: %s\n", temp->name);
+				printf("Surname: %s\n", temp->surname);
+				printf("Birth year: %d\n", temp->birthYear);
+			}
+
+		}
+		else if (option == 5) {
+			printf("Write surname of the person you want to delete:\n");
+			scanf("%s", surname);
+			DeleteElement(head, surname);
 		}
 		else {
 			printf("You chose wrong option!\n");
@@ -87,7 +115,7 @@ int Prepend(Position head, char* name, char* surname, int birthYear) {
 	strcpy(newElement->surname, surname);
 	newElement->birthYear = birthYear;
 	newElement->next = NULL;
-	
+
 	newElement->next = head->next;
 	head->next = newElement;
 
@@ -153,3 +181,47 @@ int AddAfter(Position PositionInList, Position newElement) {
 	return EXIT_SUCCESS;
 }
 
+Position FindElementBySurname(Position head, char* surname) {
+	Position temp = NULL;
+	temp = head;
+
+	while (temp != NULL) {
+		if (strcmp(temp->surname, surname) == 0) {
+			return temp;
+		}
+
+		temp = temp->next;
+	}
+
+	return EXIT_SUCCESS;
+}
+
+int DeleteElement(Position head, char* surname) {
+	Position ElementBefore = NULL;
+	Position ToDelete = NULL;
+
+	ElementBefore = FindBefore(head, surname);
+	if (ElementBefore == NULL) {
+		printf("This person is not in the list!\n");
+		return NO_PERSON_IN_LIST_ERROR;
+	}
+	else {
+		ToDelete = ElementBefore->next;
+		ElementBefore->next = ToDelete->next;
+		free(ToDelete);
+	}
+
+	return EXIT_SUCCESS;
+}
+
+Position FindBefore(Position head, char* surname) {
+	Position temp = NULL;
+	temp = head;
+
+	for (temp; temp->next; temp = temp->next) {
+		if (!strcmp(temp->next->surname, surname))
+			return temp;
+	}
+
+	return EXIT_SUCCESS;
+}
