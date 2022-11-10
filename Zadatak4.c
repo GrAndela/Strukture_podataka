@@ -67,7 +67,7 @@ int main() {
 
 
 int EnterFilename(char* filename) {
-	
+
 	printf("Enter the name of the file:\n");
 	scanf("%s", filename);
 
@@ -111,7 +111,7 @@ int ParseStringIntoList(Position head, char* buffer) {
 	Position newElement = NULL;
 
 	while (strlen(currentbuffer) > 0) {
-		
+
 		status = sscanf(currentbuffer, "%d %d %n", &coefficient, &exponent, &numBytes);
 		if (status != 2) {
 			printf("Wrong format of the file!\n");
@@ -161,7 +161,7 @@ int InsertSorted(Position head, Position newElement) {
 
 int MergeAfter(Position position, Position newElement) {
 	int resultCoefficient = 0;
-	
+
 	if (position->next == NULL || position->next->exponent != newElement->exponent) {
 		AddAfter(position, newElement);
 	}
@@ -330,7 +330,10 @@ int MultiplyPol(Position resultHead, Position head1, Position head2) {
 
 	for (p = head1->next; p != NULL; p = p->next) {
 		for (q = head2->next; q != NULL; q = q->next) {
+    
+			newElement = CreateNewElement(p->coefficient * q->coefficient, p->exponent + q->exponent);
 			newElement = CreateNewElement(p->coefficient * q->coefficient, p->exponent * q->exponent);
+
 			if (!newElement) {
 				printf("Error while allocating memory!\n");
 				return CANT_ALLOCATE_MEMORY_ERROR;
@@ -352,4 +355,3 @@ int DeleteAll(Position head) {
 
 	return EXIT_SUCCESS;
 }
-
