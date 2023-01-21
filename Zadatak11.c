@@ -29,12 +29,6 @@ typedef struct _ListOfStates {
 	CityPosition city;
 } ListOfStates;
 
-struct _HashT;
-typedef struct _HastT* HashPosition;
-typedef struct _HashT {
-	StatePosition headList;
-} HashT;
-
 StatePosition AllocateMemoryForState();
 int ReadStateFile(StatePosition);
 int SortedInputOfStates(StatePosition, StatePosition);
@@ -47,7 +41,6 @@ int Search(StatePosition, char*, int);
 int PrintCitiesWithPopulationAboveNumber(CityPosition, int);
 
 int HashFunction(char* country_name);
-
 
 int main()
 {
@@ -67,7 +60,6 @@ int main()
 	ReadStateFile(head);
 	PrintStates(head);
 
-	
 	/*printf("Enter a country and minimum population:\n");
 	scanf("%s %d", selected_country, &selected_population);
 	country = Search(head, selected_country, selected_population);
